@@ -13,16 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Install Terraform
-      env:
-        TERRAFORM_VERSION: "1.2.2"
-      run: |
-        tf_version=$TERRAFORM_VERSION
-        curl -O https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-#        unzip -o terraform_"$tf_version"_linux_amd64.zip
-#        chmod +x terraform
-#        sudo mv terraform /usr/local/bin/
-
     - name: Verify Terraform version
       run: terraform --version
 
