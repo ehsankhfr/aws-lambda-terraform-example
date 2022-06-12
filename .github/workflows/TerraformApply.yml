@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  terraform_apply:
+  terraform_bootstrap:
     runs-on: ubuntu-latest
     env:
       tf-bootstrap: ./terraform/bootstrap
@@ -32,4 +32,33 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       working-directory: ${{env.tf-bootstrap}}
+      run: terraform apply -auto-approve -input=false
+
+  terraform_postbootstrap:
+    needs: terraform_bootstrap
+    runs-on: ubuntu-latest
+    env:
+      tf-postbootstrap: ./terraform/postbootstrap
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Verify Terraform version
+      run: terraform --version
+
+    - name: Terraform init
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      working-directory: ${{env.tf-postbootstrap}}
+      run: terraform init -input=false
+
+    - name: Terraform validation
+      working-directory: ${{env.tf-postbootstrap}}
+      run: terraform validate
+
+    - name: Terraform apply
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      working-directory: ${{env.tf-postbootstrap}}
       run: terraform apply -auto-approve -input=false
