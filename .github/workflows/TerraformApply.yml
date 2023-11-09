@@ -5,44 +5,44 @@ on:
     branches: [ master ]
 
 jobs:
-  terraform_bootstrap:
-    runs-on: ubuntu-latest
-    env:
-      tf-bootstrap: ./terraform/bootstrap
-      tf-postbootstrap: ./terraform/postbootstrap
-    steps:
-    - uses: actions/checkout@v4
+  # terraform_bootstrap:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     tf-bootstrap: ./terraform/bootstrap
+  #     tf-postbootstrap: ./terraform/postbootstrap
+  #   steps:
+  #   - uses: actions/checkout@v4
 
-    - name: Verify Terraform version
-      run: terraform --version
+  #   - name: Verify Terraform version
+  #     run: terraform --version
 
-    - name: Terraform init
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      working-directory: ${{env.tf-bootstrap}}
-      run: terraform init -input=false
+  #   - name: Terraform init
+  #     env:
+  #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     working-directory: ${{env.tf-bootstrap}}
+  #     run: terraform init -input=false
 
-    - name: Terraform validation
-      working-directory: ${{env.tf-bootstrap}}
-      run: terraform validate
+  #   - name: Terraform validation
+  #     working-directory: ${{env.tf-bootstrap}}
+  #     run: terraform validate
 
-    - name: Terraform plan
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      working-directory: ${{env.tf-bootstrap}}
-      run: terraform plan
+  #   - name: Terraform plan
+  #     env:
+  #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     working-directory: ${{env.tf-bootstrap}}
+  #     run: terraform plan
 
-    - name: Terraform apply
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      working-directory: ${{env.tf-bootstrap}}
-      run: terraform apply -auto-approve -input=false
+  #   - name: Terraform apply
+  #     env:
+  #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     working-directory: ${{env.tf-bootstrap}}
+  #     run: terraform apply -auto-approve -input=false
 
   terraform_postbootstrap:
-    needs: terraform_bootstrap
+    # needs: terraform_bootstrap
     runs-on: ubuntu-latest
     env:
       tf-postbootstrap: ./terraform/postbootstrap
